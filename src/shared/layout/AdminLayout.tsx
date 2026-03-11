@@ -1,50 +1,56 @@
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { cyberColors } from "../theme/cyberColors";
+import Sidebar from "./Sidebar"; // [CTO] Importando o componente que unificamos
 
 export default function AdminLayout() {
-  const location = useLocation();
-
-  const linkStyle = (path: string) => ({
-    color: location.pathname === path ? '#3B82F6' : 'white',
-    textDecoration: 'none',
-    padding: '10px',
-    borderRadius: '4px',
-    backgroundColor: location.pathname === path ? '#1E293B' : 'transparent',
-    transition: '0.3s'
-  });
-
   return (
-    <div style={{ display: "flex", minHeight: "100vh", backgroundColor: cyberColors.background }}>
+    <div style={{ 
+      display: "flex", 
+      minHeight: "100vh", 
+      backgroundColor: cyberColors.background,
+      fontFamily: "'Inter', sans-serif" 
+    }}>
       
-      {/* Sidebar Dark Cyber */}
-      <aside style={{
-          width: "240px",
-          background: "#162031",
-          color: "white",
-          padding: "25px",
-          borderRight: `1px solid ${cyberColors.border}`
-        }}
-      >
-        <h2 style={{ color: '#3B82F6', marginBottom: '30px' }}>🛡️ SVSharp</h2>
+      {/* [CIO] Sidebar Lateral fixa para navegação principal */}
+      <Sidebar />
 
-        <nav style={{ display: "flex", flexDirection: "column", gap: 15 }}>
-          <Link to="/dashboard" style={linkStyle('/dashboard')}>📊 Dashboard</Link>
-          <Link to="/assets" style={linkStyle('/assets')}>🖥️ Assets</Link>
-          <Link to="/vulnerabilities" style={linkStyle('/vulnerabilities')}>⚠️ Vulnerabilities</Link>
-          
-          <button 
-            onClick={() => { localStorage.clear(); window.location.href = '/login'; }}
-            style={{ marginTop: '50px', background: 'none', border: 'none', color: '#EF4444', cursor: 'pointer', textAlign: 'left' }}
-          >
-            🚪 Sair do Sistema
-          </button>
-        </nav>
-      </aside>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+        
+        {/* [CISO] Navbar de Utilitários - Foco em Identidade e Segurança */}
+        <header style={{
+          height: '60px',
+          borderBottom: `1px solid ${cyberColors.border}`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          padding: '0 30px',
+          backgroundColor: 'rgba(11, 17, 32, 0.8)',
+          backdropFilter: 'blur(10px)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 10
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <span style={{ color: cyberColors.text.secondary, fontSize: '14px' }}>Admin Console</span>
+            <div style={{ 
+              width: '32px', height: '32px', borderRadius: '50%', 
+              background: cyberColors.severity.medium, display: 'flex', 
+              alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: 'white',
+              boxShadow: `0 0 10px ${cyberColors.severity.medium}44`
+            }}>A</div>
+          </div>
+        </header>
 
-      {/* Conteúdo dinâmico */}
-      <main style={{ flex: 1, overflowY: 'auto' }}>
-        <Outlet />
-      </main>
+        {/* [CTO] Área de Conteúdo - Onde as páginas (Dashboard, Assets) são renderizadas */}
+        <main style={{ 
+          flex: 1, 
+          overflowY: 'auto', 
+          padding: '40px',
+          background: `radial-gradient(circle at top right, ${cyberColors.card}55, transparent)` 
+        }}>
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 }

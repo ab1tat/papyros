@@ -1,28 +1,44 @@
-import type { CSSProperties } from "react";
+import React from 'react';
+import { cyberColors } from '../shared/theme/cyberColors';
 
-type Nivel = "Baixa" | "Media" | "Alta" | "Critica";
+interface SeverityBadgeProps {
+  level: string;
+}
 
-type Props = {
-  nivel: Nivel;
-};
-
-export default function SeverityBadge({ nivel }: Props) {
-  const colorMap: Record<Nivel, string> = {
-    Baixa: "#198754",     // verde mais escuro
-    Media: "#ffc107",     // amarelo padrão
-    Alta: "#fd7e14",      // laranja mais vibrante
-    Critica: "#dc3545"    // vermelho padrão
+export default function SeverityBadge({ level }: SeverityBadgeProps) {
+  // [CTO] Mapeamento de cores baseado no nosso Design System
+  const config: Record<string, { color: string; label: string }> = {
+    Critica: { color: cyberColors.severity.critical, label: 'CRITICAL' },
+    Alta: { color: cyberColors.severity.high, label: 'HIGH' },
+    Media: { color: cyberColors.severity.medium, label: 'MEDIUM' },
+    Baixa: { color: cyberColors.severity.low, label: 'LOW' },
   };
 
-  const style: CSSProperties = {
-    backgroundColor: colorMap[nivel],
-    color: "#dd1919",
-    padding: "4px 10px",
-    borderRadius: "6px",
-    fontSize: "12px",
-    fontWeight: 600,
-    display: "inline-block"
-  };
+  const current = config[level] || { color: cyberColors.text.secondary, label: level.toUpperCase() };
 
-  return <span style={style}>{nivel}</span>;
+  return (
+    <span style={{
+      display: 'inline-flex',
+      alignItems: 'center',
+      padding: '4px 12px',
+      borderRadius: '20px',
+      fontSize: '11px',
+      fontWeight: 'bold',
+      color: current.color,
+      backgroundColor: `${current.color}15`, // Cor com 15% de opacidade
+      border: `1px solid ${current.color}33`, // Cor com 33% de opacidade
+      boxShadow: `0 0 10px ${current.color}15`,
+      letterSpacing: '0.5px'
+    }}>
+      <span style={{ 
+        width: '6px', 
+        height: '6px', 
+        borderRadius: '50%', 
+        backgroundColor: current.color, 
+        marginRight: '8px',
+        boxShadow: `0 0 6px ${current.color}`
+      }} />
+      {current.label}
+    </span>
+  );
 }

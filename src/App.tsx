@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom"; // [CTO] Alterado para HashRouter
 import type { ReactNode } from "react";
 
 import Login from "./pages/Login";
@@ -12,7 +12,6 @@ import AdminLayout from "./shared/layout/AdminLayout";
 function PrivateRoute({ children }: { children: ReactNode }) {
   const token = localStorage.getItem("@SVSharp:token");
   
-  // Se não houver token, barra a entrada
   if (!token) {
     return <Navigate to="/login" replace />;
   }
@@ -22,7 +21,8 @@ function PrivateRoute({ children }: { children: ReactNode }) {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    // [CTO] HashRouter garante que o GitHub Pages não retorne 404 ao atualizar a página
+    <HashRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
 
@@ -35,7 +35,6 @@ export default function App() {
             </PrivateRoute>
           }
         >
-          {/* O Outlet do AdminLayout vai renderizar estes componentes abaixo: */}
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="assets" element={<Assets />} />
@@ -45,6 +44,6 @@ export default function App() {
 
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
