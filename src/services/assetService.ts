@@ -1,87 +1,45 @@
-import api from './api';
-
-// [CIO] Interface atualizada para suportar os status de severidade do Dashboard
-export interface Asset {
-  id: number;
-  name: string;
-  type: string;
-  status: string;
-  isActive: boolean;
-}
-
-export interface AssetResponseDTO {
-  id: number;
-  nome: string;
-  tipo: string;
-  ambiente: "DEV" | "HML" | "PROD";
-  descricao?: string;
-  habilitado: boolean;
-  createdAt: string;
-}
-
-export interface AssetCriacaoDTO {
-  nome: string;
-  tipo: string;
-  ambiente: "DEV" | "HML" | "PROD";
-  descricao?: string;
-}
-
-export interface EditarAssetDTO {
-  nome?: string;
-  tipo?: string;
-  ambiente?: "DEV" | "HML" | "PROD";
-  descricao?: string;
-  habilitado?: boolean;
-}
+import api from './api'
+import type { ResponseModel } from '../shared/ResponseModel'
+import type { AssetResponseDTO, AssetCriacaoDTO, EditarAssetDTO } from '../shared/assetTypes'
 
 export const assetService = {
-  // [CTO] GET /api/assets
   async listar(): Promise<AssetResponseDTO[]> {
-    const response = await api.get<AssetResponseDTO[]>('/api/assets');
-    return response.data;
+    const r = await api.get<ResponseModel<AssetResponseDTO[]>>('/assets')
+    if (!r.data.status) throw new Error(r.data.mensagem)
+    return r.data.dados
   },
 
-  // [CTO] GET /api/assets/{id}
   async buscarPorId(id: number): Promise<AssetResponseDTO> {
-    const response = await api.get<AssetResponseDTO>(`/api/assets/${id}`);
-    return response.data;
+    const r = await api.get<ResponseModel<AssetResponseDTO>>(`/assets/${id}`)
+    if (!r.data.status) throw new Error(r.data.mensagem)
+    return r.data.dados
   },
 
-  // [CISO] POST /api/assets
   async criar(dto: AssetCriacaoDTO): Promise<AssetResponseDTO> {
-    const response = await api.post<AssetResponseDTO>('/api/assets', dto);
-    return response.data;
+    const r = await api.post<ResponseModel<AssetResponseDTO>>('/assets', dto)
+    if (!r.data.status) throw new Error(r.data.mensagem)
+    return r.data.dados
   },
 
-  // [CTO] PUT /api/assets/{id}
   async editar(id: number, dto: EditarAssetDTO): Promise<AssetResponseDTO> {
-    const response = await api.put<AssetResponseDTO>(`/api/assets/${id}`, dto);
-    return response.data;
+    const r = await api.put<ResponseModel<AssetResponseDTO>>(`/assets/${id}`, dto)
+    if (!r.data.status) throw new Error(r.data.mensagem)
+    return r.data.dados
   },
 
-  // [CTO] DELETE /api/assets/{id} (Soft Delete)
   async arquivar(id: number): Promise<void> {
-    await api.delete(`/api/assets/${id}`);
+    await api.patch(`/assets/${id}/archive`)
   },
 
-  // [CTO] PATCH /api/assets/{id}/restore
   async restaurar(id: number): Promise<void> {
-    await api.patch(`/api/assets/${id}/restore`);
+    await api.patch(`/assets/${id}/restore`)
   },
 
-  // [CTO] POST /api/assets/{id}/vulns/{vulnId}
   async adicionarVuln(assetId: number, vulnId: number): Promise<void> {
-    await api.post(`/api/assets/${assetId}/vulns/${vulnId}`);
+    await api.post(`/assets/${assetId}/vulnerabilities/${vulnId}`)
   },
 
-  // [CTO] DELETE /api/assets/{id}/vulns/{vulnId}
   async removerVuln(assetId: number, vulnId: number): Promise<void> {
-    await api.delete(`/api/assets/${assetId}/vulns/${vulnId}`);
+    await api.delete(`/assets/${assetId}/vulnerabilities/${vulnId}`)
   },
-
-  // Método legado (para compatibilidade)
-  async getAll(): Promise<Asset[]> {
-    const response = await api.get<Asset[]>('/api/assets');
-    return response.data;
-  }
-};
+}

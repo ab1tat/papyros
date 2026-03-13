@@ -1,122 +1,64 @@
-# SVsharp Frontend
+# 🛡️ SVSharp Frontend
 
-Interface web do **SVsharp** para gestão de:
-
-* Assets
-* Vulnerabilidades
-* Autenticação
-* Exploração da API
-
-A aplicação consome a **API SVsharp**, que é a **fonte da verdade do sistema**.
+React + TypeScript + Vite frontend for the SVSharp Vulnerability Management Platform.
 
 ---
 
-# 📌 Visão do Projeto
-
-SPA desenvolvida com:
-
-* React
-* TypeScript
-* Vite
-
-Funcionalidades principais:
-
-* Dashboard operacional
-* Gestão de Assets
-* Gestão de Vulnerabilidades
-* Relação Asset ↔ Vulnerabilidade
-* Autenticação JWT
-* API Explorer
+## 🚀 Stack
+- **Framework:** React 18 + TypeScript
+- **Bundler:** Vite 5
+- **Routing:** React Router v6 (HashRouter for GitHub Pages)
+- **Charts:** Recharts
+- **HTTP:** Axios
+- **Deploy:** GitHub Pages (`/front-svsharp/`)
 
 ---
 
-# 🏗 Arquitetura
-
-Camadas do frontend:
-
-Pages → Telas da aplicação
-Components → Componentes reutilizáveis
-Services → Comunicação com API
-Shared → Tipos e layouts
-Theme → Padronização visual
-
-Fluxo:
-
-Pages
-↓
-Components
-↓
-Services
-↓
-API SVsharp
+## 🔗 Backend API
+- **Base URL:** `https://api-svsharp.onrender.com/api`
+- Auth via **JWT Bearer** (stored in `localStorage`)
 
 ---
 
-# 🔐 Segurança
-
-Autenticação baseada em **JWT emitido pela API**.
-
-Fluxo:
-
-1. Login
-2. API retorna JWT
-3. Token armazenado no client
-4. Requisições utilizam:
-
-Authorization: Bearer {token}
-
----
-
-# 📂 Estrutura do Projeto
-
+## 📂 Structure
 ```
-frontend
-│
-├── main.tsx
+src/
+├── components/         # Shared UI components (SeverityBadge, StatusBadge, Modal, etc.)
+├── pages/              # Route-level pages (Dashboard, Assets, AssetDetails, Vulns, Login, Register)
+├── services/           # API layer (api.ts, assetService.ts, vulnService.ts, authService.ts)
+├── shared/
+│   ├── layout/         # AdminLayout, Sidebar, Navbar
+│   ├── theme/          # cyberColors.ts design system
+│   ├── ResponseModel.ts
+│   ├── assetTypes.ts
+│   └── vulnTypes.ts
 ├── App.tsx
-│
-├── components
-│   └── SeverityBadge.tsx
-│
-├── pages
-│   ├── Dashboard.tsx
-│   ├── Assets.tsx
-│   ├── AssetDetails.tsx
-│   ├── Vulns.tsx
-│   ├── ApiExplorer.tsx
-│   └── Login.tsx
-│
-├── services
-│   ├── api.ts
-│   ├── assetService.ts
-│   ├── vulnService.ts
-│   └── authService.ts
-│
-└── shared
-    ├── Contracts
-    ├── layout
-    └── theme
+├── main.tsx
+└── index.css
 ```
 
 ---
 
-# ⚙️ Execução
-
-Instalar dependências
-
+## ⚡ Local Development
+```bash
 npm install
-
-Executar ambiente de desenvolvimento
-
 npm run dev
+```
 
-Servidor local
-
-http://localhost:5173
+Open: `http://localhost:5173`
 
 ---
 
-# 📊 Status
+## 🏗️ Build & Deploy
+```bash
+npm run build
+# Output: dist/ — deploy to GitHub Pages under /front-svsharp/
+```
 
-Frontend funcional e integrado à **API SVsharp**.
-Estrutura preparada para evolução do sistema.
+---
+
+## 🔐 Auth Flow
+1. `POST /auth/login` → receives JWT
+2. Token stored in `localStorage` as `@SVSharp:token`
+3. All protected requests inject `Authorization: Bearer <token>`
+4. 401 responses auto-redirect to `/login`

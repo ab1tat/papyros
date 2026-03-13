@@ -1,45 +1,80 @@
-/**
- * [CIO] Design System Centralizado - SVSharp
- * Definição de cores e efeitos para manter a consistência visual em todo o projeto.
- */
 export const cyberColors = {
-  // Fundo Navy Profundo (Base do Dashboard)
-  background: '#0B1120', 
-  
-  // Containers e Cards
-  card: '#16213E',       
-  
-  // Linhas divisórias e bordas sutis
-  border: '#1E293B',     
-  
-  // Tipografia
+  background: '#0b1222',
+  card: '#101e35',
+  border: '#1a2d4a',
+
   text: {
-    primary: '#FFFFFF',
-    secondary: '#94A3B8', 
+    primary:   '#e2ecf7',
+    secondary: '#7b96b8',
   },
 
-  // [CTO] Escala de Severidade (Mapeada da imagem de referência)
   severity: {
-    critical: '#F87171', // Vermelho/Rosa Neon
-    high: '#FB923C',     // Laranja Vibrante
-    medium: '#3B82F6',   // Azul Elétrico
-    low: '#10B981',      // Verde Esmeralda
+    critical: '#e63946',
+    high:     '#f4a261',
+    medium:   '#4895ef',
+    low:      '#06d6a0',
   },
 
-  // [CISO] Status de Conectividade e Integridade do Sistema
   status: {
-    online: '#10B981',
-    offline: '#EF4444',
-    warning: '#F59E0B',
+    online:      '#06d6a0',
+    offline:     '#e63946',
+    warning:     '#f4a261',
+    maintenance: '#f4a261',
+    archived:    '#64748b',
   },
 
-  // Efeitos Visuais de Profundidade e Glow
+  env: {
+    DEV:  '#4895ef',
+    HML:  '#06d6a0',
+    PROD: '#0096c7',
+  },
+
   effects: {
-    glowCritical: 'rgba(248, 113, 113, 0.2)',
-    glowHigh: 'rgba(251, 146, 60, 0.2)',
-    glowMedium: 'rgba(59, 130, 246, 0.2)',
-    glass: 'rgba(22, 33, 62, 0.8)',
-    neonPink: '#ff0055',      // ← ADICIONE ISTO
-    neonPurple: '#7000ff',    // ← ADICIONE ISTO
+    glowCritical: 'rgba(230, 57, 70, 0.2)',
+    glowHigh:     'rgba(244, 162, 97, 0.2)',
+    glowMedium:   'rgba(72, 149, 239, 0.2)',
+    glowLow:      'rgba(6, 214, 160, 0.2)',
+  },
+}
+
+export function getSeverityColor(nivel: string): string {
+  const map: Record<string, string> = {
+    Critica: cyberColors.severity.critical,
+    Alta:    cyberColors.severity.high,
+    Media:   cyberColors.severity.medium,
+    Baixa:   cyberColors.severity.low,
   }
-};
+  return map[nivel] ?? cyberColors.text.secondary
+}
+
+export function getSeverityLabel(nivel: string): string {
+  const map: Record<string, string> = {
+    Critica: 'CRITICAL',
+    Alta:    'HIGH',
+    Media:   'MEDIUM',
+    Baixa:   'LOW',
+  }
+  return map[nivel] ?? nivel.toUpperCase()
+}
+
+export function getStatusColor(status: string): string {
+  const map: Record<string, string> = {
+    Ativa:     cyberColors.status.online,
+    Resolvida: cyberColors.status.archived,
+    Arquivada: cyberColors.status.archived,
+  }
+  return map[status] ?? cyberColors.text.secondary
+}
+
+export function getStatusLabel(status: string): string {
+  const map: Record<string, string> = {
+    Ativa:     'Active',
+    Resolvida: 'Resolved',
+    Arquivada: 'Archived',
+  }
+  return map[status] ?? status
+}
+
+export function getEnvColor(ambiente: string): string {
+  return cyberColors.env[ambiente as keyof typeof cyberColors.env] ?? cyberColors.text.secondary
+}
