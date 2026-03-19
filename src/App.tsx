@@ -39,3 +39,4 @@ export default function App() {
     </Routes>
   )
 }
+// Auditoria SOC: Nova aba de arquivados sincronizada.
