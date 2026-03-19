@@ -96,7 +96,7 @@ export default function Archived() {
                       <td style={tdIdStyle}>#{a.id}</td>
                       <td style={tdStyle}>{a.nome}</td>
                       <td style={tdStyle}>{a.tipo}</td>
-                      <td style={tdStyle}><EnvBadge env={a.ambiente} /></td>
+                      <td style={tdStyle}><EnvBadge ambiente={a.ambiente} /></td>
                       <td style={tdLastStyle}>
                         <button onClick={() => handleRestoreAsset(a.id)} style={restoreBtn}>Restaurar</button>
                       </td>
@@ -125,7 +125,7 @@ export default function Archived() {
                       <td style={tdIdStyle}>#{v.id}</td>
                       <td style={tdStyle}>{v.titulo}</td>
                       <td style={tdStyle}>{v.nivel}</td>
-                      <td style={tdStyle}><EnvBadge env={v.ambiente} /></td>
+                      <td style={tdStyle}><EnvBadge ambiente={v.ambiente} /></td>
                       <td style={tdLastStyle}>
                         <button onClick={() => handleRestoreVuln(v.id)} style={restoreBtn}>Restaurar</button>
                       </td>
