@@ -7,6 +7,7 @@ import Dashboard    from './pages/Dashboard'
 import Assets       from './pages/Assets'
 import AssetDetails from './pages/AssetDetails'
 import Vulns        from './pages/Vulns'
+import Archived     from './pages/Archived'
 import Reports      from './pages/Reports'
 import Settings     from './pages/Settings'
 import AdminLayout  from './shared/layout/AdminLayout'
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="assets"          element={<Assets />} />
         <Route path="assets/:id"      element={<AssetDetails />} />
         <Route path="vulns"           element={<Vulns />} />
+        <Route path="archived"        element={<Archived />} />
         <Route path="reports"         element={<Reports />} />
         <Route path="settings"        element={<Settings />} />
       </Route>

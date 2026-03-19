@@ -16,6 +16,12 @@ export const assetService = {
     return r.data.dados
   },
 
+  async listarArquivados(): Promise<AssetResponseDTO[]> {
+    const r = await api.get<ResponseModel<AssetResponseDTO[]>>('/assets/archived')
+    if (!r.data.status) throw new Error(r.data.mensagem)
+    return r.data.dados
+  },
+
   async buscarPorId(id: number): Promise<AssetResponseDTO> {
     const r = await api.get<ResponseModel<AssetResponseDTO>>(`/assets/${id}`)
     if (!r.data.status) throw new Error(r.data.mensagem)

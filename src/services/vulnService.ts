@@ -18,6 +18,12 @@ export const vulnService = {
     return r.data.dados
   },
 
+  async listarArquivados(): Promise<VulnResponseDTO[]> {
+    const r = await api.get<ResponseModel<VulnResponseDTO[]>>('/vulns/archived')
+    if (!r.data.status) throw new Error(r.data.mensagem)
+    return r.data.dados
+  },
+
   /** 🔍 Busca uma vulnerabilidade específica pelo ID */
   async buscarPorId(id: number): Promise<VulnResponseDTO> {
     const r = await api.get<ResponseModel<VulnResponseDTO>>(`/vulns/${id}`)
