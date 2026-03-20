@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
   PieChart, Pie, Cell,
@@ -83,8 +83,10 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
 const PIE_COLORS = { DEV: '#4895ef', HML: '#06d6a0', PROD: '#0096c7' }
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   const [vulns, setVulns]   = useState<VulnResponseDTO[]>([])
   const [assets, setAssets] = useState<AssetResponseDTO[]>([])
+  const [archivedCount, setArchivedCount] = useState(0)
   const [loading, setLoading] = useState(true)
   const [searchQ, setSearchQ] = useState('')
   const [filterSev, setFilterSev] = useState('All')
@@ -93,10 +95,19 @@ export default function Dashboard() {
   const load = useCallback(async () => {
     setLoading(true)
     try {
-      const [v, a] = await Promise.all([vulnService.listar(), assetService.listar()])
+      const [v, a, arq] = await Promise.all([
+        vulnService.listar(), 
+        assetService.listar(),
+        assetService.listarArquivados().catch(() => []) // Handle potential error if endpoint fails
+      ])
       setVulns(v)
       setAssets(a)
-    } catch { /* silent */ } finally { setLoading(false) }
+      setArchivedCount(arq.length)
+    } catch (err) { 
+      console.error('Failed to load dashboard data', err)
+    } finally { 
+      setLoading(false) 
+    }
   }, [])
 
   useEffect(() => { load() }, [load])
@@ -316,11 +327,17 @@ export default function Dashboard() {
                     <td style={{ ...td, color: '#7b96b8', fontSize: 12 }}>{v.ambiente}</td>
                     <td style={td}><StatusBadge status={v.status} /></td>
                     <td style={td}>
-                      <button style={{
-                        background: 'none', border: 'none', cursor: 'pointer',
-                        color: '#7b96b8', padding: '4px 6px', borderRadius: 4,
-                        fontSize: 14, display: 'flex', gap: 2,
-                      }}>···</button>
+                      <button 
+                        onClick={() => navigate('/vulns')}
+                        style={{
+                          background: 'none', border: 'none', cursor: 'pointer',
+                          color: '#7b96b8', padding: '4px 6px', borderRadius: 4,
+                          fontSize: 14, display: 'flex', gap: 2,
+                        }}
+                        title="View Details"
+                      >
+                        ···
+                      </button>
                     </td>
                   </tr>
                 ))
@@ -351,7 +368,7 @@ export default function Dashboard() {
             {[
               { label: 'Online',      count: online,          color: '#06d6a0' },
               { label: 'Maintenance', count: maintenance,     color: '#f4a261' },
-              { label: 'Archived',    count: 0,               color: '#64748b' },
+              { label: 'Archived',    count: archivedCount,   color: '#64748b' },
             ].map(item => (
               <div key={item.label} style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'space-between',
