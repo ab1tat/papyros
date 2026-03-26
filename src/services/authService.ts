@@ -7,8 +7,8 @@ interface LoginResponse {
 export const authService = {
   async login(username: string, password: string): Promise<string> {
     const response = await api.post<LoginResponse>('/auth/login', {
-      Username: username,
-      Password: password,
+      username: username,
+      password: password,
     })
     const token = response.data?.token
     if (!token) throw new Error('Token não retornado pela API.')
