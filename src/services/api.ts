@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'https://api-aBitat.onrender.com/api',
+  baseURL: 'https://rapsodia.onrender.com/api',
   timeout: 60000,
 })
 
