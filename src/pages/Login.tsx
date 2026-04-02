@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { authService } from '../services/authService'
+import logoSword from '../shared/assets/logo.png'
 
 export default function Login() {
   const [user, setUser]     = useState('')

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../services/api'
+import logoSword from '../shared/assets/logo.png'
 
 export default function Register() {
   const [form, setForm] = useState({ username: '', password: '', confirm: '' })

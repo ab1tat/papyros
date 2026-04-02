@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { authService } from '../../services/authService'
+import logoSword from '../assets/logo.png'
 
 const ROUTE_LABELS: Record<string, string> = {
   '/dashboard':  'Dashboard',
