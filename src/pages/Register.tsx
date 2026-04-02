@@ -1,22 +1,35 @@
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import api from '../services/api'
-import logoSword from '../shared/assets/logo.png'
+import logot from '../shared/assets/logo.png'
 
 export default function Register() {
   const [form, setForm] = useState({ username: '', password: '', confirm: '' })
-  const [error, setError]   = useState('')
+  const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-    if (form.password !== form.confirm) { setError('Passwords do not match.'); return }
+    
+    // Validação de segurança primária (CISO)
+    if (form.password !== form.confirm) { 
+      setError('Passwords do not match.')
+      return 
+    }
+    
     setLoading(true)
     try {
-      const res = await api.post('/auth/register', { Username: form.username, Password: form.password })
-      if (res.status === 200 || res.status === 201) navigate('/login')
+      // Alinhado com o DTO do Backend Rapsodia (Username/Password com iniciais maiúsculas)
+      const res = await api.post('/auth/register', { 
+        Username: form.username, 
+        Password: form.password 
+      })
+      
+      if (res.status === 200 || res.status === 201) {
+        navigate('/login')
+      }
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message
       setError(msg ?? 'Registration failed. Try again.')
@@ -34,51 +47,54 @@ export default function Register() {
         radial-gradient(circle at 20% 80%, rgba(0,180,216,0.07) 0%, transparent 40%)
       `,
       display: 'flex', alignItems: 'center', justifyContent: 'center',
+      padding: '20px',
       fontFamily: "'Inter', sans-serif",
     }}>
-      <div style={{ width: '100%', maxWidth: 380, animation: 'fadeIn 0.4s ease-out' }}>
+      <div style={{ width: '100%', maxWidth: 380, position: 'relative', zIndex: 1 }}>
         <div style={{ textAlign: 'center', marginBottom: 36 }}>
-          <div style={{
-            width: 54, height: 54,
-            background: 'linear-gradient(135deg, #0077b6, #00b4d8)',
-            borderRadius: 14,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 16px',
-            boxShadow: '0 0 30px rgba(0,180,216,0.4)',
-          }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
-              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-            </svg>
-          </div>
-          <div style={{ fontSize: 26, fontWeight: 800, color: '#e2ecf7', letterSpacing: '3px' }}>aBitat</div>
-          <div style={{ fontSize: 12, color: '#7b96b8', marginTop: 4 }}>Create your account</div>
+          <img 
+            src={logot} 
+            alt="aBitat Logo" 
+            style={{ 
+              width: 64, 
+              height: 64, 
+              margin: '0 auto 16px', 
+              borderRadius: 14, 
+              boxShadow: '0 0 30px rgba(0,180,216,0.3)',
+              border: '1px solid #1a2d4a'
+            }} 
+          />
+          <div style={{ fontSize: 26, fontWeight: 800, color: '#e2ecf7', letterSpacing: '3px', textTransform: 'uppercase' }}>aBitat</div>
+          <div style={{ fontSize: 12, color: '#7b96b8', marginTop: 4, fontWeight: 500 }}>Create your account</div>
         </div>
 
         <form onSubmit={handleRegister} style={{
           background: 'rgba(13,26,48,0.9)',
           backdropFilter: 'blur(16px)',
           border: '1px solid #1a2d4a',
-          borderRadius: 16,
+          borderRadius: 20,
           padding: '32px 28px',
           boxShadow: '0 24px 64px rgba(0,0,0,0.5)',
         }}>
           {error && (
             <div style={{
-              background: 'rgba(230,57,70,0.12)', border: '1px solid rgba(230,57,70,0.3)',
-              borderRadius: 8, padding: '10px 14px', fontSize: 12, color: '#e63946', marginBottom: 18,
+              background: 'rgba(230,57,70,0.1)',
+              border: '1px solid rgba(230,57,70,0.2)',
+              borderRadius: 8, padding: '12px', fontSize: 12, color: '#ff4d5a', marginBottom: 20,
+              display: 'flex', alignItems: 'center', gap: 10,
             }}>
-              ⚠ {error}
+              <span>⚠</span> {error}
             </div>
           )}
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             {[
               { label: 'Username', key: 'username', type: 'text', placeholder: 'Choose a username' },
               { label: 'Password', key: 'password', type: 'password', placeholder: 'Create a password' },
               { label: 'Confirm Password', key: 'confirm', type: 'password', placeholder: 'Confirm your password' },
             ].map(f => (
-              <label key={f.key} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <span style={{ fontSize: 11, fontWeight: 600, color: '#7b96b8', letterSpacing: '0.5px', textTransform: 'uppercase' }}>{f.label}</span>
+              <label key={f.key} style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#5c7694', letterSpacing: '0.8px', textTransform: 'uppercase' }}>{f.label}</span>
                 <input
                   type={f.type}
                   placeholder={f.placeholder}
@@ -94,19 +110,23 @@ export default function Register() {
           </div>
 
           <button type="submit" disabled={loading} style={{
-            width: '100%', marginTop: 22, padding: '12px',
+            width: '100%', marginTop: 28, padding: '14px',
             background: loading ? '#0a3a5c' : 'linear-gradient(90deg, #0077b6, #0096c7)',
-            border: 'none', borderRadius: 9,
+            border: 'none', borderRadius: 10,
             color: '#fff', fontSize: 13, fontWeight: 700,
-            cursor: loading ? 'not-allowed' : 'pointer',
-            fontFamily: 'inherit',
-          }}>
-            {loading ? 'Creating account...' : 'CREATE ACCOUNT'}
+            letterSpacing: '1px', cursor: loading ? 'not-allowed' : 'pointer',
+            boxShadow: loading ? 'none' : '0 8px 20px rgba(0,119,182,0.3)',
+            transition: 'transform 0.2s',
+          }}
+          onMouseOver={e => !loading && (e.currentTarget.style.transform = 'translateY(-1px)')}
+          onMouseOut={e => !loading && (e.currentTarget.style.transform = 'translateY(0)')}
+          >
+            {loading ? 'CREATING ACCOUNT...' : 'CREATE ACCOUNT'}
           </button>
 
-          <p style={{ textAlign: 'center', marginTop: 18, fontSize: 12, color: '#7b96b8' }}>
+          <p style={{ textAlign: 'center', marginTop: 22, fontSize: 12, color: '#7b96b8' }}>
             Already have an account?{' '}
-            <Link to="/login" style={{ color: '#00b4d8', fontWeight: 500 }}>Sign in</Link>
+            <Link to="/login" style={{ color: '#00b4d8', fontWeight: 600, textDecoration: 'none' }}>Sign in</Link>
           </p>
         </form>
       </div>
@@ -115,12 +135,12 @@ export default function Register() {
 }
 
 const inputSt: React.CSSProperties = {
-  padding: '10px 12px',
+  padding: '12px 14px',
   background: '#060e1f',
   border: '1px solid #1a2d4a',
-  borderRadius: 8, color: '#e2ecf7',
-  fontSize: 13, outline: 'none',
+  borderRadius: 10, color: '#e2ecf7',
+  fontSize: 14, outline: 'none',
   fontFamily: 'inherit',
-  transition: 'border-color 0.2s',
+  transition: 'all 0.2s',
   width: '100%',
 }

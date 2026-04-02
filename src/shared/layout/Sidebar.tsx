@@ -1,36 +1,25 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { authService } from '../../services/authService'
+import logot from '../assets/logo.png'
 
 const NAV = [
-  {
-    path: '/dashboard', label: 'Dashboard',
-    icon: <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>,
-  },
-  {
-    path: '/assets', label: 'Assets',
-    icon: <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="6" width="20" height="5" rx="2"/><rect x="2" y="13" width="20" height="5" rx="2"/><circle cx="6" cy="8.5" r="1" fill="currentColor"/><circle cx="6" cy="15.5" r="1" fill="currentColor"/></svg>,
-  },
-  {
-    path: '/vulns', label: 'Vulnerabilities',
-    icon: <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="15" r="0.5" fill="currentColor"/></svg>,
-  },
-  {
-    path: '/archived', label: 'Arquivados',
-    icon: <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>,
-  },
-  {
-    path: '/reports', label: 'Reports',
-    icon: <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
-  },
-  {
-    path: '/settings', label: 'Settings',
-    icon: <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 0-14.14 0M4.93 19.07a10 10 0 0 0 14.14 0M19.07 19.07a10 10 0 0 0 0-14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>,
-  },
+  { path: '/dashboard', label: 'Dashboard',
+    icon: <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg> },
+  { path: '/assets', label: 'Assets',
+    icon: <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="6" width="20" height="5" rx="2"/><rect x="2" y="13" width="20" height="5" rx="2"/><circle cx="6" cy="8.5" r="1" fill="currentColor"/><circle cx="6" cy="15.5" r="1" fill="currentColor"/></svg> },
+  { path: '/vulns', label: 'Vulnerabilities',
+    icon: <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="15" r="0.5" fill="currentColor"/></svg> },
+  { path: '/archived', label: 'Arquivados',
+    icon: <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> },
+  { path: '/reports', label: 'Reports',
+    icon: <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> },
+  { path: '/settings', label: 'Settings',
+    icon: <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 0-14.14 0M4.93 19.07a10 10 0 0 0 14.14 0M19.07 19.07a10 10 0 0 0 0-14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg> },
 ]
 
 export default function Sidebar() {
   const location = useLocation()
-  const navigate  = useNavigate()
+  const navigate = useNavigate()
 
   const handleLogout = () => {
     authService.logout()
@@ -55,21 +44,14 @@ export default function Sidebar() {
         borderBottom: '1px solid #1a2d4a',
         display: 'flex', alignItems: 'center', gap: 11,
       }}>
-        <div style={{
-          width: 36, height: 36,
-          background: 'linear-gradient(135deg, #0077b6, #00b4d8)',
-          borderRadius: 10,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 0 14px rgba(0,180,216,0.45)',
-          flexShrink: 0,
-        }}>
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="white">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-          </svg>
-        </div>
+        <img 
+          src={logot} 
+          alt="Logo" 
+          style={{ width: 36, height: 36, borderRadius: 8, flexShrink: 0 }}
+        />
         <div>
-          <div style={{ fontSize: 14, fontWeight: 800, color: '#e2ecf7', letterSpacing: '2px', lineHeight: 1.1 }}>SV</div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: '#00b4d8', letterSpacing: '2.5px', lineHeight: 1.1 }}>SHARP</div>
+          <div style={{ fontSize: 14, fontWeight: 800, color: '#e2ecf7', letterSpacing: '2px', lineHeight: 1.1 }}>aBitat</div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: '#00b4d8', letterSpacing: '2.5px', lineHeight: 1.1 }}>Platform</div>
         </div>
       </div>
 
@@ -135,9 +117,10 @@ export default function Sidebar() {
             onMouseOver={e => (e.currentTarget.style.color = '#e63946')}
             onMouseOut={e => (e.currentTarget.style.color = '#7b96b8')}
           >
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-              <polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
             </svg>
           </button>
         </div>
